@@ -92,6 +92,15 @@
 			return json_encode($this->list);
 		}
 
+                /* return a simple Array list */
+                public function toArrayList() {
+                        $items = array();
+                        foreach( $this->list as $l) {
+                                array_push($items, $l);
+                        }
+                        return $items;
+                }
+
 	}
 
 ?>

@@ -19,7 +19,7 @@ Stuff:
 <?php print $cList->toJson() ?>
 <p></p>
 <?php
-	$cList->removeContact( $guidHold );
+	//$cList->removeContact( $guidHold );
 	print $cList->toJson();
 ?>
 
