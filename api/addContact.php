@@ -17,6 +17,8 @@
 	$e = $_GET["email"];
 	$mn = $_GET["mobile_nbr"];
 
+	error_log($fn."--".$ln."--".$e."--".$mn);
+
 	// set up the ContactList as necessary
 	$contactList = $_SESSION["contact_list"];
 
@@ -37,5 +39,9 @@
 	$result["status"] = true;
 	$result["items"] = $items;
 
-	print json_encode($result);
+	error_log(json_encode($result));
+
+	header("Content-Type: application/json");
+	echo json_encode($result);
+	exit;
 ?>
