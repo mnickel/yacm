@@ -9,13 +9,30 @@
 	session_start();
 
 	$contactList = $_SESSION["contact_list"];
+	$la = $_GET["listAction"];
 	$result = array();
+
 	if(isset($contactList)) {
-		$result["status"] = true;
-		$result["items"] = $contactList->toArrayList();
+		if(isset($la)) {
+			$contactArrayList = $contactList->toArrayList();
+			$result["iTotalDisplayRecords"] = count($contactArrayList);
+			$result["iTotalRecords"] = count($contactArrayList);	
+			$result["aaData"] = $contactArrayList;
+
+		} else {
+			$result["status"] = true;
+			$result["items"] = $contactList->toArrayList();	
+		}
+
 	} else {
-		$result["status"] = false;
-		$result["items"] = null;
+		if(isset($la)) {
+			$result["iTotalDisplayRecords"] = 0;
+			$result["iTotalRecords"] = 0;	
+			$result["aaData"] = array();
+		} else {
+			$result["status"] = false;
+			$result["items"] = null;
+		}
 	}
 
 	header("Content-Type: application/json");

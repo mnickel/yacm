@@ -25,7 +25,9 @@
 		$result["items"] = null;
 	}
 
-	print json_encode($result);
+	header("Content-Type: application/json");
+	echo json_encode($result);
+	exit;
 
 
 ?>

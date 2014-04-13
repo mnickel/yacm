@@ -21,7 +21,22 @@ if(q != undefined) {
     }
 }
 
+// scope out a quick workspace
+window.yacm = {};
 
+$( document ).on( "click", ".removeContactAction", function( e ) {
+	// remove the Contact that was clicked
+	$.ajax({
+		url: "/api/removeContact.php?contact_id=" + e.target.id,
+		type: "GET",
+		success: function( data ) {
+			if( data.status ) {
+				window.yacm.contactGrid.fnDestroy();
+				loadContactGrid();
+			}
+		}
+	})
+}); 
 
 $(document).ready( function() {
 
@@ -32,9 +47,8 @@ $(document).ready( function() {
 		e = $("#inputEmail").val();
 		mn = $("#inputMobileNumber").val()
 
-		//console.log(fn + "-" + ln + "-" + e + "-" + mn);
 		$.ajax({
-            url: "http://localhost:8888/api/addContact.php?first_name="+fn+"&last_name="+ln+"&email="+e+"&mobile_nbr="+mn,
+            url: "/api/addContact.php?first_name="+fn+"&last_name="+ln+"&email="+e+"&mobile_nbr="+mn,
             type: "GET",
             success: function(data){
             	console.log(data);
@@ -44,9 +58,8 @@ $(document).ready( function() {
 					type: "GET",
 					dataType: "json",
 					success: function(data) {
-						console.log(data);
-						//$("#stuff").empty();
-						$("#stuff").html(JSON.stringify(data));
+						window.yacm.contactGrid.fnDestroy();
+						loadContactGrid();
 						$("#basicModal").modal('hide');
 					}
 				})
@@ -59,7 +72,40 @@ $(document).ready( function() {
 		});
 	});
 
+	loadContactGrid();
 });
+
+
+function loadContactGrid() {
+	window.yacm["contactGrid"] = $("#contactGrid").dataTable({
+    	"sPaginationType": "full_numbers",
+    	"sScrollY": "280px",
+    	"bAutoWidth": false,
+    	//"bProcessing": true,
+    	//"sDom": 'T<"clear">lfrtip',
+    	"sAjaxSource": '/api/listContacts.php?listAction=true',
+		"aoColumns": [
+	        {"sClass": "contactId", "mDataProp": "contactId"},  
+            {"sClass": "firstName", "mDataProp": "firstName"},
+            {"sClass": "lastName", "mDataProp": "lastName"},
+            {"sClass": "email", "mDataProp": "email"},
+            {"sClass": "mobileNbr", "mDataProp": "mobileNbr"}
+        ],
+        //,
+        //"aoColumnDefs": [
+        //    { "asSorting": [], "aTargets": [0] },
+        //    { "bSortable": false, "aTargets": [0] }
+        //],
+        //"aaSorting": [[1, 'asc']],
+        "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+        	// wire in a button "x" to remove the contact clicked
+    		var cid = $(nRow).find(".contactId");
+    		var cidButton = $("<button type='button' class='removeContactAction' id='" + aData.contactId + "'>&times;</button>");
+    		cid.html(cidButton);
+    		return nRow;
+        }
+    });
+}
 
 
 
