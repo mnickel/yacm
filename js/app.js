@@ -121,7 +121,7 @@ $(document).ready( function() {
 			contactId = $(row).find(".contactId .removeContactAction")[0].id
 			deleteContact(contactId);
 		} else {
-			alert("You need to select a row to edit");
+			alert("You need to select a row to delete");
 		}
 
 	});
