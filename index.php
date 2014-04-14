@@ -42,7 +42,8 @@ session_start();
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#basicModal">Add Contact</button></li>
+        <li class="active"><button id="add_button" type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#basicModal">Add Contact</button></li>
+        <li class="active"><button id="edit_button" type="button" class="btn btn-default navbar-btn">Edit Contact</button></li>
         <li class="active"><button id="delete_button" type="button" class="btn btn-default navbar-btn">Delete Contact</button></li>
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -90,7 +91,7 @@ session_start();
 				  <div class="form-group">
 				    <label for="inputEmail" class="col-sm-3 control-label">Email</label>
 				    <div class="col-sm-9">
-				      <input type="text" class="form-control" id="inputEmail" placeholder="Email" value="foobar.com">
+				      <input type="email" class="form-control" id="inputEmail" placeholder="Email" value="me@about.com">
 				    </div>
 				  </div>
 				  <div class="form-group">
@@ -102,7 +103,7 @@ session_start();
 				</form>
             </div>
             <div class="modal-footer">
-	            <button class="btn btn-success" id="add_submit">Submit</button>
+	            <button class="btn btn-success" id="modal_submit">Submit</button>
 	            <a href="#" class="btn" data-dismiss="modal">Close</a>
           	</div>
         </div>

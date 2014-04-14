@@ -31,7 +31,7 @@
 			$result["aaData"] = array();
 		} else {
 			$result["status"] = false;
-			$result["items"] = null;
+			$result["items"] = array();
 		}
 	}
 

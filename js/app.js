@@ -24,6 +24,9 @@ if(q != undefined) {
 // scope out a quick workspace
 window.yacm = {};
 
+// newest version of jquery doesn't support the "live" method anymore
+// $(document).on is now the propery way to lazily attach event handlers 
+// to DOM objects that are transient 
 $( document ).on( "click", ".removeContactAction", function( e ) {
 	// remove the Contact that was clicked
 	deleteContact(e.target.id);
@@ -39,17 +42,41 @@ $(document).on("click", "#contactGrid tbody tr", function( e ) {
     }
 });
 
+
+
 $(document).ready( function() {
 
-	$("#add_submit").click( function() {
+	// wire behavior for when the modal form is shown
+	// based on relatedTarget and the row selected, figure out
+	// if we need to add, edit or delete
+	//$('#basicModal').on('show.bs.modal', function (e) {
+	//	debugger;
+	//
+	//});
+
+	// wire behaviour when a user clicks the Add or Edit buttons
+	$("#modal_submit").click( function() {
 
 		fn = $("#inputFirstName").val();
 		ln = $("#inputLastName").val();
 		e = $("#inputEmail").val();
-		mn = $("#inputMobileNumber").val()
+		mn = $("#inputMobileNumber").val();
+		url = "";
+
+		//see if a row was selected.  Assume that user has clicked the "Add Contact" button if
+		//no row is selected
+		row = window.yacm.contactGrid.$('tr.row_selected');
+		if(row && row.length > 0) {
+			cid = $(row).find('.contactId .removeContactAction')[0].id;
+			url = "/api/updateContact.php?contact_id="+cid+"&first_name="+fn+"&last_name="+ln+"&email="+e+"&mobile_nbr="+mn;
+
+		} else {
+			url = "/api/addContact.php?first_name="+fn+"&last_name="+ln+"&email="+e+"&mobile_nbr="+mn;
+		}
+
 
 		$.ajax({
-            url: "/api/addContact.php?first_name="+fn+"&last_name="+ln+"&email="+e+"&mobile_nbr="+mn,
+            url: url,
             type: "GET",
             success: function(data){
             	console.log(data);
@@ -73,11 +100,37 @@ $(document).ready( function() {
 		});
 	});
 
+	// behavior for the Edit Button
+	$("#edit_button").click( function() {
+		row = window.yacm.contactGrid.$('tr.row_selected');
+		if(row && row.length > 0) {
+			fn = $(row).find('.firstName').html();
+			ln = $(row).find('.lastName').html();
+			e = $(row).find('.email').html();
+			mn = $(row).find('.mobileNbr').html();
+
+			$("#inputFirstName").val(fn);
+			$("#inputLastName").val(ln);
+			$("#inputEmail").val(e);
+			$("#inputMobileNumber").val(mn);
+
+			$("#basicModal").modal('show');
+
+		} else {
+			alert("You need to select a row to edit");
+		}
+	});
+
+	// behavior for when the Delete button is clicked
 	$("#delete_button").click( function() {
 		// delete selected row
-		$row = window.yacm.contactGrid.$('tr.row_selected');
-		$contactId = $($row).find(".contactId .removeContactAction")[0].id
-		deleteContact($contactId);
+		row = window.yacm.contactGrid.$('tr.row_selected');
+		if(row && row.length > 0) {
+			contactId = $(row).find(".contactId .removeContactAction")[0].id
+			deleteContact(contactId);
+		} else {
+			alert("You need to select a row to edit");
+		}
 
 	});
 
