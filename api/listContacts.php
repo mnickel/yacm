@@ -3,7 +3,9 @@
 /*
 	listContacts.php
 
-	just return a result that is a JSON Array of Contacts
+	just return a result that is a JSON Array of Contacts.
+	if listAction is a valid query parameter, the returning json will be in a form that the dataTable
+	will easily consume.
 */
 	require "../includes/classDefs.php";	
 	session_start();
