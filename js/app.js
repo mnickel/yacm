@@ -26,17 +26,18 @@ window.yacm = {};
 
 $( document ).on( "click", ".removeContactAction", function( e ) {
 	// remove the Contact that was clicked
-	$.ajax({
-		url: "/api/removeContact.php?contact_id=" + e.target.id,
-		type: "GET",
-		success: function( data ) {
-			if( data.status ) {
-				window.yacm.contactGrid.fnDestroy();
-				loadContactGrid();
-			}
-		}
-	})
+	deleteContact(e.target.id);
 }); 
+
+$(document).on("click", "#contactGrid tbody tr", function( e ) {
+    if ( $(this).hasClass('row_selected') ) {
+        $(this).removeClass('row_selected');
+    }
+    else {
+        window.yacm.contactGrid.$('tr.row_selected').removeClass('row_selected');
+        $(this).addClass('row_selected');
+    }
+});
 
 $(document).ready( function() {
 
@@ -72,6 +73,14 @@ $(document).ready( function() {
 		});
 	});
 
+	$("#delete_button").click( function() {
+		// delete selected row
+		$row = window.yacm.contactGrid.$('tr.row_selected');
+		$contactId = $($row).find(".contactId .removeContactAction")[0].id
+		deleteContact($contactId);
+
+	});
+
 	loadContactGrid();
 });
 
@@ -83,6 +92,24 @@ function loadContactGrid() {
     	"bAutoWidth": false,
     	//"bProcessing": true,
     	//"sDom": 'T<"clear">lfrtip',
+    	//"sDom": 'T<"clear">lfrtip',
+        //"oTableTools": {
+        //    "sRowSelect": "single",
+        //    "aButtons": [ 
+		//		{
+		//			"sExtends": "copy",
+		//			"sButtonText": "Copy to Clipboard",
+		//			"mColumns": "visible"
+		//		},
+		//		{
+		//			"sExtends": "csv",
+		//			"sButtonText": "Save to CSV",
+		//			"sTitle": "LIVEyearbookRosterInfo",
+		//			"mColumns": "visible"
+		//		}
+		//	],
+		//	"sSwfPath": "/lib/dataTables/extras/TableTools/media/swf/copy_csv_xls.swf"
+        //},
     	"sAjaxSource": '/api/listContacts.php?listAction=true',
 		"aoColumns": [
 	        {"sClass": "contactId", "mDataProp": "contactId"},  
@@ -105,6 +132,19 @@ function loadContactGrid() {
     		return nRow;
         }
     });
+}
+
+function deleteContact(cid) {
+	$.ajax({
+		url: "/api/removeContact.php?contact_id=" + cid,
+		type: "GET",
+		success: function( data ) {
+			if( data.status ) {
+				window.yacm.contactGrid.fnDestroy();
+				loadContactGrid();
+			}
+		}
+	})
 }
 
 
