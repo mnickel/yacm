@@ -25,7 +25,7 @@ if(q != undefined) {
 window.yacm = {};
 
 // newest version of jquery doesn't support the "live" method anymore
-// $(document).on is now the propery way to lazily attach event handlers 
+// $(document).on is now the proper way to lazily attach event handlers 
 // to DOM objects that are transient 
 $( document ).on( "click", ".removeContactAction", function( e ) {
 	// remove the Contact that was clicked
@@ -45,14 +45,6 @@ $(document).on("click", "#contactGrid tbody tr", function( e ) {
 
 
 $(document).ready( function() {
-
-	// wire behavior for when the modal form is shown
-	// based on relatedTarget and the row selected, figure out
-	// if we need to add, edit or delete
-	//$('#basicModal').on('show.bs.modal', function (e) {
-	//	debugger;
-	//
-	//});
 
 	// wire behaviour when a user clicks the Add or Edit buttons
 	$("#modal_submit").click( function() {
@@ -143,26 +135,6 @@ function loadContactGrid() {
     	"sPaginationType": "full_numbers",
     	"sScrollY": "280px",
     	"bAutoWidth": false,
-    	//"bProcessing": true,
-    	//"sDom": 'T<"clear">lfrtip',
-    	//"sDom": 'T<"clear">lfrtip',
-        //"oTableTools": {
-        //    "sRowSelect": "single",
-        //    "aButtons": [ 
-		//		{
-		//			"sExtends": "copy",
-		//			"sButtonText": "Copy to Clipboard",
-		//			"mColumns": "visible"
-		//		},
-		//		{
-		//			"sExtends": "csv",
-		//			"sButtonText": "Save to CSV",
-		//			"sTitle": "LIVEyearbookRosterInfo",
-		//			"mColumns": "visible"
-		//		}
-		//	],
-		//	"sSwfPath": "/lib/dataTables/extras/TableTools/media/swf/copy_csv_xls.swf"
-        //},
     	"sAjaxSource": '/api/listContacts.php?listAction=true',
 		"aoColumns": [
 	        {"sClass": "contactId", "mDataProp": "contactId"},  
@@ -171,12 +143,6 @@ function loadContactGrid() {
             {"sClass": "email", "mDataProp": "email"},
             {"sClass": "mobileNbr", "mDataProp": "mobileNbr"}
         ],
-        //,
-        //"aoColumnDefs": [
-        //    { "asSorting": [], "aTargets": [0] },
-        //    { "bSortable": false, "aTargets": [0] }
-        //],
-        //"aaSorting": [[1, 'asc']],
         "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
         	// wire in a button "x" to remove the contact clicked
     		var cid = $(nRow).find(".contactId");
